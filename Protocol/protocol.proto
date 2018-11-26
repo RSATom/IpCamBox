@@ -1,0 +1,89 @@
+syntax = "proto2";
+
+package Protocol;
+
+enum MessageType
+{
+    EmptyMessage = 0;
+
+    ClientGreetingMessage = 1;
+    ServerGreetingMessage = 2;
+
+    ClientConfigRequestMessage = 5;
+    ClientConfigReplyMessage = 6;
+    ClientConfigUpdatedMessage = 7;
+
+    ClientReadyMessage = 8;
+
+    RequestStreamMessage = 9;
+    StreamStatusMessage = 10;
+    StopStreamMessage = 11;
+}
+
+message ClientGreeting
+{
+}
+
+message ServerGreeting
+{
+}
+
+message VideoSource
+{
+    optional string id = 1;
+
+    optional bool enabled = 2;
+
+    optional string uri = 3;
+    optional string user = 4;
+    optional string password = 5;
+
+    optional uint32 dropboxMaxStorage = 10; // in megabytes
+}
+
+message DropboxConfig
+{
+    optional string token = 1;
+}
+
+message ClientConfig
+{
+    repeated VideoSource sources = 1;
+    optional DropboxConfig dropbox = 2;
+}
+
+message ClientConfigRequest
+{
+}
+
+message ClientConfigReply
+{
+    optional ClientConfig config = 1;
+}
+
+message ClientConfigUpdated
+{
+    optional ClientConfig config = 1;
+}
+
+message ClientReady
+{
+}
+
+message RequestStream
+{
+    optional string sourceId = 1;
+    reserved 2; // reserved for "type"
+    optional string destination = 3;
+}
+
+message StreamStatus
+{
+    optional string sourceId = 1;
+    optional bool success = 2;
+}
+
+message StopStream
+{
+    optional string sourceId = 1;
+}

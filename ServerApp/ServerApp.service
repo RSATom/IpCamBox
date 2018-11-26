@@ -1,0 +1,11 @@
+[Unit]
+Description=IpCamBox Server
+Wants=postgresql.service
+
+[Service]
+ExecStart=%h/bin/ServerApp
+Restart=always
+Environment="GST_DEBUG=*:3"
+
+[Install]
+WantedBy=default.target

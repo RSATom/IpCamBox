@@ -1,0 +1,9 @@
+[Unit]
+Description=Device Box
+
+[Service]
+ExecStart=%h/bin/DeviceBoxApp localhost
+Restart=always
+
+[Install]
+WantedBy=default.target
