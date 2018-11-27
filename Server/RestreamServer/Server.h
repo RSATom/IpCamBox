@@ -58,7 +58,7 @@ private:
         const std::string& path,
         bool record);
 
-    std::string extractSourceId(const std::string& pass) const;
+    SourceId extractSourceId(const std::string& path) const;
 
     void firstPlayerConnected(const std::string& path);
     void lastPlayerDisconnected(const std::string& path);

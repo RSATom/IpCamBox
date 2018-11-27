@@ -209,7 +209,7 @@ bool Server::authenticationRequired(GstRTSPMethod method, const std::string& pat
 {
     Log()->trace(">> Server.authenticationRequired. url: {}", path);
 
-    const std::string sourceId = extractSourceId(path);
+    const SourceId sourceId = extractSourceId(path);
     if(sourceId.empty())
         return true;
 
@@ -270,7 +270,7 @@ bool Server::authorize(
         ">> Server.authorize. user: {}, path: {}, check: {}",
         userName, path, static_cast<int>(action));
 
-    const std::string sourceId = extractSourceId(path);
+    const SourceId sourceId = extractSourceId(path);
     if(sourceId.empty()) {
         Log()->error("Source Id is empty");
         return false;
@@ -307,9 +307,9 @@ bool Server::authorize(
     return authorize;
 }
 
-std::string Server::extractSourceId(const std::string& path) const
+SourceId Server::extractSourceId(const std::string& path) const
 {
-    std::string sourceName;
+    SourceId sourceId;
 
     gchar** tokens = g_strsplit(path.data(), "/", 3);
     for(unsigned i = 0; i < 2 && tokens[i] != NULL; ++i) {
@@ -317,13 +317,13 @@ std::string Server::extractSourceId(const std::string& path) const
             case 0:
                 break;
             case 1:
-                sourceName = tokens[1];
+                sourceId = tokens[1];
                 break;
         }
     }
     g_strfreev(tokens);
 
-    return sourceName;
+    return sourceId;
 }
 
 void Server::firstPlayerConnected(const std::string& path)
