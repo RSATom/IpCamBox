@@ -5,7 +5,7 @@
 
 #include <gst/gst.h>
 
-#include "GstUtils/GstPtr.h"
+#include <CxxPtr/GstPtr.h>
 
 #include "finally_execute.h"
 #include "Log.h"
