@@ -60,9 +60,9 @@ private:
 
     SourceId extractSourceId(const std::string& path) const;
 
-    void firstPlayerConnected(const std::string& path);
+    void firstPlayerConnected(const UserName&, const std::string& path);
     void lastPlayerDisconnected(const std::string& path);
-    void recorderConnected(const std::string& path);
+    void recorderConnected(const UserName&, const std::string& path);
     void recorderDisconnected(const std::string& path);
 
 private:

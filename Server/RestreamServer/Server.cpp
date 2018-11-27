@@ -16,6 +16,17 @@ GST_PLUGIN_STATIC_DECLARE(interpipe);
 namespace RestreamServer
 {
 
+namespace {
+
+struct PathInfo {
+    DeviceId deviceId;
+    SourceId sourceId;
+    bool hasPlayers;
+    bool hasRecorder;
+};
+
+}
+
 struct Server::Private
 {
     Private(
@@ -33,6 +44,8 @@ struct Server::Private
 
     std::thread serverThread;
     std::unique_ptr<RestreamServerLib::Server> restreamServer;
+
+    std::map<std::string, PathInfo> pathsInfo;
 };
 
 Server::Private::Private(
@@ -122,11 +135,11 @@ void Server::serverMain()
             std::placeholders::_4);
 
     callbacks.firstPlayerConnected =
-        std::bind(&Server::firstPlayerConnected, this, std::placeholders::_1);
+        std::bind(&Server::firstPlayerConnected, this, std::placeholders::_1, std::placeholders::_2);
     callbacks.lastPlayerDisconnected =
         std::bind(&Server::lastPlayerDisconnected, this, std::placeholders::_1);
     callbacks.recorderConnected =
-        std::bind(&Server::recorderConnected, this, std::placeholders::_1);
+        std::bind(&Server::recorderConnected, this, std::placeholders::_1, std::placeholders::_2);
     callbacks.recorderDisconnected =
         std::bind(&Server::recorderDisconnected, this, std::placeholders::_1);
 
@@ -326,11 +339,37 @@ SourceId Server::extractSourceId(const std::string& path) const
     return sourceId;
 }
 
-void Server::firstPlayerConnected(const std::string& path)
+void Server::firstPlayerConnected(const UserName& userName, const std::string& path)
 {
     Log()->trace(
         ">> Server.firstPlayerConnected. path: {}",
         path);
+
+    const SourceId sourceId =  extractSourceId(path);
+
+    ::Server::Config::PlaySource playSource;
+    if(!_p->config->findUserSource(userName, sourceId, &playSource)) {
+        Log()->critical(
+            "fail find PlaySource for {}",
+            path);
+        return;
+    }
+
+    auto pathIt = _p->pathsInfo.find(path);
+    if(pathIt == _p->pathsInfo.end()) {
+        assert(sourceId == playSource.sourceId);
+        _p->pathsInfo.emplace(path,
+            PathInfo {
+                .deviceId = playSource.deviceId,
+                .sourceId = playSource.sourceId,
+                .hasPlayers = true,
+                .hasRecorder = false,
+            });
+    } else
+        pathIt->second.hasPlayers = true;
+
+    if(_p->firstReaderConnectedCallback)
+        _p->firstReaderConnectedCallback(playSource.deviceId, playSource.sourceId);
 }
 
 void Server::lastPlayerDisconnected(const std::string& path)
@@ -338,13 +377,55 @@ void Server::lastPlayerDisconnected(const std::string& path)
     Log()->trace(
         ">> Server.lastPlayerDisconnected. path: {}",
         path);
+
+    auto pathIt = _p->pathsInfo.find(path);
+    assert(pathIt != _p->pathsInfo.end());
+    if(pathIt == _p->pathsInfo.end())
+        return;
+
+    assert(pathIt->second.sourceId == extractSourceId(path));
+
+    assert(pathIt->second.hasPlayers);
+    pathIt->second.hasPlayers = false;
+
+    if(_p->lastReaderDisconnectedCallback)
+        _p->lastReaderDisconnectedCallback(
+            pathIt->second.deviceId,
+            pathIt->second.sourceId);
+
+    if(!pathIt->second.hasPlayers && !pathIt->second.hasRecorder)
+        _p->pathsInfo.erase(pathIt);
 }
 
-void Server::recorderConnected(const std::string& path)
+void Server::recorderConnected(const UserName& userName, const std::string& path)
 {
     Log()->trace(
         ">> Server.recorderConnected. path: {}",
         path);
+
+    SourceId sourceId =  extractSourceId(path);
+
+    ::Server::Config::Source source;
+    if(!_p->config->findDeviceSource(userName, sourceId, &source)) {
+        Log()->critical(
+            "fail find Source for {}",
+            path);
+        return;
+    }
+
+    auto pathIt = _p->pathsInfo.find(path);
+    if(pathIt == _p->pathsInfo.end()) {
+        _p->pathsInfo.emplace(path,
+            PathInfo {
+                .deviceId = userName,
+                .sourceId = source.id,
+                .hasPlayers = false,
+                .hasRecorder = true,
+            });
+    } else {
+        assert(!pathIt->second.hasRecorder);
+        pathIt->second.hasRecorder = true;
+    }
 }
 
 void Server::recorderDisconnected(const std::string& path)
@@ -352,6 +433,19 @@ void Server::recorderDisconnected(const std::string& path)
     Log()->trace(
         ">> Server.recorderDisconnected. path: {}",
         path);
+
+    auto pathIt = _p->pathsInfo.find(path);
+    assert(pathIt != _p->pathsInfo.end());
+    if(pathIt == _p->pathsInfo.end())
+        return;
+
+    assert(pathIt->second.sourceId == extractSourceId(path));
+
+    assert(pathIt->second.hasRecorder);
+    pathIt->second.hasRecorder = false;
+
+    if(!pathIt->second.hasPlayers && !pathIt->second.hasRecorder)
+        _p->pathsInfo.erase(pathIt);
 }
 
 }
