@@ -275,6 +275,9 @@ void Streamer::initPipeline()
 
     if(decodebin && rtspsink && certificateProvider) {
         g_object_set(rtspsink, "tls-interaction", certificateProvider, nullptr);
+#if DISABLE_VERIFY_RESTREAM_SERVER
+        g_object_set(rtspsink, "tls-validation-flags", 0, nullptr);
+#endif
 
         GstCaps* decodebinCaps = nullptr;
         g_object_get(decodebin, "caps", &decodebinCaps, nullptr);
