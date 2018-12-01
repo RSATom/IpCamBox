@@ -127,7 +127,7 @@ void Streamer::linkToRtspSink(GstPad* pad)
 {
     GstPadTemplate* sinkPadTemplate =
         gst_element_class_get_pad_template(
-            GST_ELEMENT_GET_CLASS(_rtspsink), "stream_%u");
+            GST_ELEMENT_GET_CLASS(_rtspsink), "sink_%u");
     GstPad* sinkPad =
         gst_element_request_pad(
             _rtspsink, sinkPadTemplate, nullptr, nullptr);
