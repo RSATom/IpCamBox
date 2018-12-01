@@ -34,7 +34,7 @@ void ServerMain(
         (const std::string& deviceName, const std::string& sourceName) {
             server.requestStream(
                 deviceName, sourceName,
-                restreamServerUrl + sourceName);
+                restreamServerUrl + sourceName + "?record");
         };
     auto lastReaderDisconnected =
         [&server] (const std::string& deviceName, const std::string& sourceName) {
