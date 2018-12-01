@@ -118,7 +118,8 @@ void Server::serverMain()
             &Server::authenticationRequired,
             this,
             std::placeholders::_1,
-            std::placeholders::_2);
+            std::placeholders::_2,
+            std::placeholders::_3);
     callbacks.authenticate =
         std::bind(
             &Server::authenticate,
@@ -218,7 +219,10 @@ bool Server::tlsAuthenticate(GTlsCertificate* cert, UserName* userName)
     return _p->config->authenticate(cert, userName);
 }
 
-bool Server::authenticationRequired(GstRTSPMethod method, const std::string& path)
+bool Server::authenticationRequired(
+    GstRTSPMethod /*method*/,
+    const std::string& path,
+    bool record)
 {
     Log()->trace(">> Server.authenticationRequired. url: {}", path);
 
@@ -226,12 +230,15 @@ bool Server::authenticationRequired(GstRTSPMethod method, const std::string& pat
     if(sourceId.empty())
         return true;
 
-    if(_p->config->findUserSource(UserName(), sourceId)) {
+    if(!record && _p->config->findUserSource(UserName(), sourceId)) {
         Log()->trace("SourceId \"{}\" DOES NOT require authentication as anonymous", sourceId);
         return false;
     }
 
-    Log()->trace("SourceId \"{}\" REQUIRE authentication", sourceId);
+    Log()->debug(
+        "SourceId \"{}\" REQUIRE authentication for {}",
+        sourceId,
+        record ? "RECORD" : "PLAY");
 
     return true;
 }

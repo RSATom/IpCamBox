@@ -49,7 +49,7 @@ private:
     void scheduleUpdateCertificate();
 
     bool tlsAuthenticate(GTlsCertificate*, UserName*);
-    bool authenticationRequired(GstRTSPMethod method, const std::string& path);
+    bool authenticationRequired(GstRTSPMethod method, const std::string& path, bool record);
     bool authenticate(const std::string& userName, const std::string& pass);
 
     bool authorize(
