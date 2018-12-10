@@ -8,6 +8,7 @@
 #include <CxxPtr/GlibPtr.h>
 #include <CxxPtr/GstPtr.h>
 
+#include "Common/Config.h"
 #include "finally_execute.h"
 #include "Log.h"
 #include "CertificateProvider.h"
@@ -127,7 +128,11 @@ void Streamer::linkToRtspSink(GstPad* pad)
 {
     GstPadTemplate* sinkPadTemplate =
         gst_element_class_get_pad_template(
+#if GST_CHECK_VERSION(1, 13, 90)
             GST_ELEMENT_GET_CLASS(_rtspsink), "sink_%u");
+#else
+            GST_ELEMENT_GET_CLASS(_rtspsink), "stream_%u");
+#endif
     GstPad* sinkPad =
         gst_element_request_pad(
             _rtspsink, sinkPadTemplate, nullptr, nullptr);
