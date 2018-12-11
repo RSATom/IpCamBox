@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 project(Server)
 
 add_subdirectory(Config)
+if(NOT CMAKE_CROSSCOMPILING)
 add_subdirectory(PGConfig)
+endif()
 add_subdirectory(ControlServer)
 add_subdirectory(RestreamServer)
 
@@ -30,8 +32,12 @@ target_link_libraries(${PROJECT_NAME}
     ControlServer
     RestreamServer
     Config
-    PGConfig
     Common)
+if(CMAKE_CROSSCOMPILING)
+    target_link_libraries(${PROJECT_NAME} pcre resolv) # why?
+elseif()
+    target_link_libraries(${PROJECT_NAME} PGConfig)
+endif()
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 #get_cmake_property(_variableNames VARIABLES)

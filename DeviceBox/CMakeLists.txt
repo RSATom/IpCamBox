@@ -30,7 +30,7 @@ target_link_libraries(${PROJECT_NAME}
     ${GIO_LIBRARIES})
 
 if(CMAKE_CROSSCOMPILING)
-    target_link_libraries(${PROJECT_NAME} pcre) # why?
+    target_link_libraries(${PROJECT_NAME} pcre resolv) # why?
 endif()
 
 target_link_libraries(${PROJECT_NAME} NetworkCore Protocol Common)

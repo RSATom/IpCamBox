@@ -50,12 +50,9 @@ add_subdirectory(Protocol)
 add_subdirectory(DeviceBox)
 add_subdirectory(Daemon)
 add_subdirectory(DeviceBoxApp)
-
-if(NOT CMAKE_CROSSCOMPILING)
 add_subdirectory(Server)
-add_subdirectory(Test)
 add_subdirectory(ServerApp)
-endif()
+add_subdirectory(Test)
 
 
 #get_cmake_property(_variableNames VARIABLES)
