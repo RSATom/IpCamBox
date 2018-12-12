@@ -17,3 +17,9 @@
 enum {
     UPDATE_CERTIFICATE_TIMEOUT = 24 * 60, // minutes
 };
+
+enum {
+    CONTROL_SERVER_PORT = 8000,
+};
+
+#define SERVER_HOST "localhost"

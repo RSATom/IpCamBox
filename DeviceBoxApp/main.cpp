@@ -8,12 +8,6 @@
 #include "DeviceBox/DeviceBoxMain.h"
 
 
-#define SERVER_HOST "restream.northeurope.cloudapp.azure.com"
-
-enum {
-    SERVER_PORT = 8000,
-};
-
 #if !USE_TEST_CLIENT_CERT
 static const char* CertificateFile = "./client.crt";
 static const char* KeyFile = "./client.key";
@@ -93,7 +87,7 @@ int main(int/*argc*/, char*/*argv*/[])
 
     asio::io_service ioService;
 
-    DeviceBoxMain(&ioService, authConfig, SERVER_HOST, SERVER_PORT, false);
+    DeviceBoxMain(&ioService, authConfig, SERVER_HOST, CONTROL_SERVER_PORT, false);
 
     return 0;
 }

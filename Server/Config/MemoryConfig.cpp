@@ -11,10 +11,7 @@
 #include "Common/Keys.h"
 
 
-#define SERVER_HOST "localhost"
-
 enum {
-    CONTROL_SERVER_PORT = 8080,
     STATIC_SERVER_PORT = 8090,
     RESTREAM_SERVER_PORT = 8100,
 };
