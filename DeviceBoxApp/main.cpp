@@ -14,8 +14,10 @@ enum {
     SERVER_PORT = 8000,
 };
 
+#if !USE_TEST_CLIENT_CERT
 static const char* CertificateFile = "./client.crt";
 static const char* KeyFile = "./client.key";
+#endif
 
 struct FileClose
 {
@@ -32,6 +34,10 @@ int main(int/*argc*/, char*/*argv*/[])
 {
     DeviceBox::InitDeviceBoxLoggers(false);
 
+#if USE_TEST_CLIENT_CERT
+    std::string clientCertificate =
+        std::string(TestClientCertificate) + TestClientKey;
+#else
     FILEPtr certFilePtr(fopen(CertificateFile, "rb"));
     if(!certFilePtr) {
         DeviceBox::Log()->critical(
@@ -79,6 +85,7 @@ int main(int/*argc*/, char*/*argv*/[])
         KeyFile);
         return -1;
     }
+#endif
 
     DeviceBox::AuthConfig authConfig {
         .certificate = clientCertificate,
