@@ -20,7 +20,9 @@ file(GLOB SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
 add_library(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${GSTREAMER_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CURL_INCLUDE_DIRS}
+    ${GSTREAMER_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME}
     ${CMAKE_THREAD_LIBS_INIT}
     ${GSTREAMER_LIBRARIES}
