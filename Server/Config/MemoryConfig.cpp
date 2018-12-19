@@ -11,12 +11,6 @@
 #include "Common/Keys.h"
 
 
-enum {
-    STATIC_SERVER_PORT = 8090,
-    RESTREAM_SERVER_PORT = 8100,
-};
-
-
 namespace Server
 {
 
@@ -70,10 +64,10 @@ const PlaySource* User::findSource(const SourceId& sourceId) const
 
 Config::Config()
 {
-    _serverConfig.serverHost = SERVER_HOST;
-    _serverConfig.controlServerPort = CONTROL_SERVER_PORT;
-    _serverConfig.staticServerPort = STATIC_SERVER_PORT;
-    _serverConfig.restreamServerPort = RESTREAM_SERVER_PORT;
+    _serverConfig.serverHost = DEFAULT_SERVER_HOST;
+    _serverConfig.controlServerPort = DEFAULT_CONTROL_SERVER_PORT;
+    _serverConfig.staticServerPort = DEFAULT_STATIC_SERVER_PORT;
+    _serverConfig.restreamServerPort = DEFAULT_RESTREAM_SERVER_PORT;
 
 
     Device* deviceConfig = addDevice("device1");
@@ -82,7 +76,10 @@ Config::Config()
 
     Source* bars = deviceConfig->addSource("bars");
     bars->uri =
-        fmt::format("rtsp://{}:{}/bars", SERVER_HOST, STATIC_SERVER_PORT);
+        fmt::format(
+            "rtsp://{}:{}/bars",
+            _serverConfig.serverHost,
+            _serverConfig.staticServerPort);
     bars->dropboxMaxStorage = 0;
 
     Source* dlink = deviceConfig->addSource("dlink931");

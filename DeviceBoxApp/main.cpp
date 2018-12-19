@@ -87,7 +87,12 @@ int main(int/*argc*/, char*/*argv*/[])
 
     asio::io_service ioService;
 
-    DeviceBoxMain(&ioService, authConfig, SERVER_HOST, CONTROL_SERVER_PORT, false);
+    DeviceBoxMain(
+        &ioService,
+        authConfig,
+        DEFAULT_SERVER_HOST,
+        DEFAULT_CONTROL_SERVER_PORT,
+        false);
 
     return 0;
 }
