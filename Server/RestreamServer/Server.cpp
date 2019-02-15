@@ -1,5 +1,7 @@
 #include "Server.h"
 
+#include <map>
+
 #include <gst/gst.h>
 
 #include <CxxPtr/GlibPtr.h>
