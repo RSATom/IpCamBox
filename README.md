@@ -16,6 +16,10 @@ IpCams restream toolset
 +---------+             +-------------------+                 +-------------+             +---------+
 
 ```
+## Build
+* `sudo apt install git cmake libspdlog-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstrtspserver-1.0-dev libprotobuf-dev libcurl4-openssl-dev libssl-dev libpq-dev protobuf-compiler`
+* `git clone https://github.com/RSATom/IpCamBox.git`
+* `cd IpCamBox  && mkdir build && cd build && cmake .. && make -j4 && cd ..`
 
 ## Demo
 
