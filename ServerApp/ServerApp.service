@@ -1,6 +1,6 @@
 [Unit]
 Description=IpCamBox Server
-Wants=postgresql.service
+#Wants=postgresql.service
 
 [Service]
 ExecStart=%h/bin/ServerApp
