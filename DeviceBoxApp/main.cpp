@@ -24,9 +24,18 @@ typedef
         FILE,
         FileClose> FILEPtr;
 
-int main(int/*argc*/, char*/*argv*/[])
+int main(int argc, char* argv[])
 {
     DeviceBox::InitDeviceBoxLoggers(false);
+
+    if(argc != 1) {
+        DeviceBox::Log()->critical("Missing server host name");
+        return -1;
+    }
+
+    const std::string serverHost = argv[0];
+
+    DeviceBox::Log()->info("Server host: \"{}\"", serverHost);
 
 #if USE_TEST_CLIENT_CERT
     std::string clientCertificate =
@@ -90,7 +99,7 @@ int main(int/*argc*/, char*/*argv*/[])
     DeviceBoxMain(
         &ioService,
         authConfig,
-        DEFAULT_SERVER_HOST,
+        serverHost,
         DEFAULT_CONTROL_SERVER_PORT,
         false);
 
