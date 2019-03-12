@@ -2,7 +2,7 @@
 Description=Device Box
 
 [Service]
-ExecStart=%h/bin/DeviceBoxApp localhost
+ExecStart=%h/bin/DeviceBoxApp ipcambox.webchimera.org
 Restart=always
 
 [Install]
