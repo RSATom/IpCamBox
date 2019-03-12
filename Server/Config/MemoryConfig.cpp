@@ -64,7 +64,7 @@ const PlaySource* User::findSource(const SourceId& sourceId) const
 
 Config::Config()
 {
-    _serverConfig.serverHost = DEFAULT_SERVER_HOST;
+    _serverConfig.serverHost = "localhost";
     _serverConfig.controlServerPort = DEFAULT_CONTROL_SERVER_PORT;
     _serverConfig.staticServerPort = DEFAULT_STATIC_SERVER_PORT;
     _serverConfig.restreamServerPort = DEFAULT_RESTREAM_SERVER_PORT;
