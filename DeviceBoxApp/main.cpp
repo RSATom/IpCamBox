@@ -28,12 +28,12 @@ int main(int argc, char* argv[])
 {
     DeviceBox::InitDeviceBoxLoggers(false);
 
-    if(argc != 1) {
+    if(argc < 2) {
         DeviceBox::Log()->critical("Missing server host name");
         return -1;
     }
 
-    const std::string serverHost = argv[0];
+    const std::string serverHost = argv[1];
 
     DeviceBox::Log()->info("Server host: \"{}\"", serverHost);
 

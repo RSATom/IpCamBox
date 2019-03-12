@@ -2,8 +2,13 @@
 
 #include "Common/Config.h"
 #include "NetworkCore/Log.h"
-#include "Server/Config/MemoryConfig.h"
+#if USE_PG_CONFIG
 #include "Server/PGConfig/Config.h"
+#elif USE_FILE_CONFIG
+#include "Server/FileConfig/Config.h"
+#else
+#include "Server/Config/MemoryConfig.h"
+#endif
 #include "Server/ServerMain.h"
 #include "DeviceBox/DeviceBoxMain.h"
 
@@ -74,6 +79,12 @@ int main(int argc, char *argv[])
     DeviceBox::AuthConfig authConfig {
         .certificate = device.certificate,
     };
+#elif USE_FILE_CONFIG
+    Server::FileConfig::Config config;
+
+    DeviceBox::AuthConfig authConfig {
+        .certificate = std::string(TestClientCertificate) + TestClientKey,
+    };
 #else
     Server::MemoryConfig::Config config;
 
@@ -90,6 +101,8 @@ int main(int argc, char *argv[])
         [] () {
 #if USE_PG_CONFIG
             Server::PGConfig::Config config;
+#elif USE_FILE_CONFIG
+            Server::FileConfig::Config config;
 #else
             Server::MemoryConfig::Config config;
 #endif

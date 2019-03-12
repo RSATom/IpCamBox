@@ -8,6 +8,8 @@
 
 #if USE_PG_CONFIG
     #include "Server/PGConfig/Config.h"
+#elif USE_FILE_CONFIG
+#include "Server/FileConfig/Config.h"
 #else
     #include "Server/Config/MemoryConfig.h"
 #endif
@@ -37,6 +39,8 @@ int main(int argc, char *argv[])
     Server::PGConfig::Config config;
     if(!config.serverConfig())
         return -1;
+#elif USE_FILE_CONFIG
+    Server::FileConfig::Config config;
 #else
     Server::MemoryConfig::Config config;
 #endif

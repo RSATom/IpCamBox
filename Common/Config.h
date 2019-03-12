@@ -13,6 +13,7 @@
 #endif
 
 // #define USE_PG_CONFIG 1
+#define USE_FILE_CONFIG 1
 
 enum {
     UPDATE_CERTIFICATE_TIMEOUT = 24 * 60, // minutes
