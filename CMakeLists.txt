@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(IpCamBox)
 
 if(CMAKE_CROSSCOMPILING)
-    set(ENV{PKG_CONFIG_PATH} ${CMAKE_SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig)
+    set(ENV{PKG_CONFIG_PATH} "${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig")
     set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
     add_definitions(-Wno-psabi)
 endif()
