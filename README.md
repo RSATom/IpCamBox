@@ -29,8 +29,3 @@ IpCams restream toolset
 * run `Test` application
 * run
 `gst-launch-1.0 rtspsrc location=rtsps://localhost:8100/bars tls-validation-flags=0 ! decodebin ! autovideosink`
-
-## Online Demos
-* `gst-play-1.0 rtsps://ipcambox.webchimera.org:8100/dlink931`
-* `gst-play-1.0 rtsps://ipcambox.webchimera.org:8100/bars`
-* Browser view: http://janus.ipcambox.webchimera.org/
