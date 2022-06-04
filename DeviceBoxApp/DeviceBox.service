@@ -1,9 +1,0 @@
-[Unit]
-Description=Device Box
-
-[Service]
-ExecStart=%h/bin/DeviceBoxApp ipcambox.webchimera.org
-Restart=always
-
-[Install]
-WantedBy=default.target
