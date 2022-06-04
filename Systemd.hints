@@ -1,8 +1,0 @@
-systemd user units folder:
-~/.config/systemd/user
-
-enable start service without user login:
-loginctl enable-linger username
-
-systemctl --user enable ControlServer
-systemctl --user enable DeviceBox
